@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云朵飘动表情背景</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 25%, #B0E0E6 50%, #E0F6FF 75%, #F0F8FF 100%);
+            background-size: 400% 400%;
+            animation: skyShift 20s ease infinite;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        @keyframes skyShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 云朵背景装饰 */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            opacity: 0.8;
+            animation: cloudFloat 30s linear infinite;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            z-index: 5;
+        }
+
+        .cloud:before {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+        }
+
+        .cloud:after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+        }
+
+        .cloud1 {
+            width: 100px;
+            height: 40px;
+            top: 20%;
+            left: -100px;
+            animation-duration: 25s;
+        }
+
+        .cloud1:before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+
+        .cloud1:after {
+            width: 60px;
+            height: 20px;
+            top: -10px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 80px;
+            height: 30px;
+            top: 60%;
+            left: -80px;
+            animation-duration: 35s;
+            animation-delay: -10s;
+        }
+
+        .cloud2:before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 15px;
+        }
+
+        .cloud2:after {
+            width: 50px;
+            height: 15px;
+            top: -5px;
+            right: 15px;
+        }
+
+        .cloud3 {
+            width: 120px;
+            height: 50px;
+            top: 10%;
+            left: -120px;
+            animation-duration: 40s;
+            animation-delay: -5s;
+        }
+
+        .cloud3:before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 20px;
+        }
+
+        .cloud3:after {
+            width: 70px;
+            height: 25px;
+            top: -15px;
+            right: 20px;
+        }
+
+        .cloud4 {
+            width: 90px;
+            height: 35px;
+            top: 40%;
+            left: -90px;
+            animation-duration: 30s;
+            animation-delay: -15s;
+        }
+
+        .cloud4:before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 12px;
+        }
+
+        .cloud4:after {
+            width: 55px;
+            height: 18px;
+            top: -8px;
+            right: 12px;
+        }
+
+        .cloud5 {
+            width: 110px;
+            height: 45px;
+            top: 75%;
+            left: -110px;
+            animation-duration: 45s;
+            animation-delay: -20s;
+        }
+
+        .cloud5:before {
+            width: 55px;
+            height: 55px;
+            top: -27px;
+            left: 18px;
+        }
+
+        .cloud5:after {
+            width: 65px;
+            height: 22px;
+            top: -12px;
+            right: 18px;
+        }
+
+        @keyframes cloudFloat {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
+        }
+
+        #canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none; /* 隐藏控制面板，适合作为背景 */
+        }
+
+        .controls h3 {
+            margin: 0 0 15px 0;
+            color: #4A90E2;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .control-group {
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .control-group label {
+            min-width: 90px;
+            font-weight: bold;
+            color: #666;
+            font-size: 14px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            min-width: 120px;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #87CEEB, #4A90E2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4A90E2;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .value-display {
+            min-width: 45px;
+            text-align: right;
+            font-weight: bold;
+            color: #4A90E2;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #87CEEB, #4A90E2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #4A90E2;
+            padding: 15px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none; /* 隐藏统计面板，适合作为背景 */
+        }
+
+        .fps {
+            color: #32CD32;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .controls, .stats {
+                position: relative;
+                margin: 10px;
+                width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 云朵背景装饰 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    <div class="cloud cloud4"></div>
+    <div class="cloud cloud5"></div>
+
+    <!-- 控制面板和统计面板已隐藏，适合作为背景使用 -->
+    <div class="controls" style="display: none;">
+        <h3>☁️ 云朵控制</h3>
+        <div class="control-group">
+            <label>飘动速度:</label>
+            <input type="range" id="speedSlider" min="0.1" max="2" value="0.3" step="0.1">
+            <span class="value-display" id="speedValue">0.3</span>
+        </div>
+        <div class="control-group">
+            <label>呼吸强度:</label>
+            <input type="range" id="breathSlider" min="0.1" max="1" value="0.2" step="0.05">
+            <span class="value-display" id="breathValue">0.2</span>
+        </div>
+        <div class="control-group">
+            <label>尺寸变化:</label>
+            <input type="range" id="sizeSlider" min="0.1" max="1" value="0.3" step="0.05">
+            <span class="value-display" id="sizeValue">0.3</span>
+        </div>
+        <div class="control-group">
+            <label>透明度:</label>
+            <input type="range" id="opacitySlider" min="0.3" max="1" value="0.6" step="0.05">
+            <span class="value-display" id="opacityValue">0.6</span>
+        </div>
+        <div class="control-group">
+            <label>数量:</label>
+            <input type="range" id="countSlider" min="3" max="20" value="8" step="1">
+            <span class="value-display" id="countValue">8</span>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button id="pauseBtn">⏸️ 暂停</button>
+            <button id="resetBtn">🔄 重置</button>
+        </div>
+    </div>
+
+    <div class="stats" style="display: none;">
+        <div>FPS: <span class="fps" id="fpsDisplay">60</span></div>
+        <div>云朵数量: <span id="cloudCountDisplay">8</span></div>
+        <div>呼吸周期: <span id="breathCycleDisplay">0</span></div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        class CloudEmotion {
+            constructor(x, y, image, canvas) {
+                this.canvas = canvas;
+                this.image = image;
+                
+                // 位置和运动
+                this.x = x;
+                this.y = y;
+                this.baseX = x;
+                this.baseY = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                
+                // 尺寸和缩放
+                this.baseSize = 40 + Math.random() * 40; // 40-80px
+                this.sizeVariation = 0.3 + Math.random() * 0.4; // 尺寸变化幅度
+                this.currentSize = this.baseSize;
+                
+                // 呼吸效果
+                this.breathPhase = Math.random() * Math.PI * 2;
+                this.breathSpeed = 0.01 + Math.random() * 0.02;
+                this.breathIntensity = 0.15 + Math.random() * 0.2;
+                
+                // 透明度和颜色
+                this.baseOpacity = 0.6 + Math.random() * 0.3;
+                this.currentOpacity = this.baseOpacity;
+                
+                // 飘动效果
+                this.floatPhaseX = Math.random() * Math.PI * 2;
+                this.floatPhaseY = Math.random() * Math.PI * 2;
+                this.floatSpeedX = 0.005 + Math.random() * 0.01;
+                this.floatSpeedY = 0.003 + Math.random() * 0.008;
+                this.floatAmplitudeX = 20 + Math.random() * 30;
+                this.floatAmplitudeY = 15 + Math.random() * 25;
+                
+                // 旋转（非常轻微）
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.002;
+                
+                // 深度效果
+                this.depth = Math.random();
+                this.parallaxFactor = 0.5 + this.depth * 0.5;
+                
+                // 风吹摇晃效果
+                this.windPhase = Math.random() * Math.PI * 2;
+                this.windSpeed = 0.02 + Math.random() * 0.03;
+                this.windIntensity = 0.8 + Math.random() * 0.4; // 摇晃强度
+                this.windDirection = Math.random() * Math.PI * 2; // 风向
+                this.swayAmplitudeX = 15 + Math.random() * 20; // 水平摇晃幅度
+                this.swayAmplitudeY = 8 + Math.random() * 12; // 垂直摇晃幅度
+                this.rotationSway = 0; // 摇晃时的旋转
+                this.maxRotationSway = 0.1 + Math.random() * 0.1; // 最大摇晃旋转角度
+            }
+
+            update(speedMultiplier, breathIntensityMultiplier, sizeVariationMultiplier, opacityMultiplier) {
+                // 更新呼吸效果
+                this.breathPhase += this.breathSpeed * speedMultiplier;
+                const breathScale = 1 + Math.sin(this.breathPhase) * this.breathIntensity * breathIntensityMultiplier;
+                
+                // 更新尺寸变化
+                const sizePhase = this.breathPhase * 0.7;
+                const sizeScale = 1 + Math.sin(sizePhase) * this.sizeVariation * sizeVariationMultiplier;
+                this.currentSize = this.baseSize * breathScale * sizeScale;
+                
+                // 更新透明度变化
+                const opacityPhase = this.breathPhase * 0.5;
+                this.currentOpacity = this.baseOpacity * opacityMultiplier * (0.8 + 0.2 * Math.sin(opacityPhase));
+                
+                // 更新飘动位置
+                this.floatPhaseX += this.floatSpeedX * speedMultiplier;
+                this.floatPhaseY += this.floatSpeedY * speedMultiplier;
+                
+                const floatX = Math.sin(this.floatPhaseX) * this.floatAmplitudeX;
+                const floatY = Math.sin(this.floatPhaseY) * this.floatAmplitudeY;
+                
+                // 风吹摇晃效果
+                this.windPhase += this.windSpeed * speedMultiplier;
+                const windStrength = Math.sin(this.windPhase) * this.windIntensity;
+                const windX = Math.cos(this.windDirection) * windStrength * this.swayAmplitudeX;
+                const windY = Math.sin(this.windDirection) * windStrength * this.swayAmplitudeY;
+                
+                // 风吹摇晃的旋转效果
+                this.rotationSway = Math.sin(this.windPhase * 1.5) * windStrength * this.maxRotationSway;
+                
+                // 缓慢的整体移动
+                this.baseX += this.vx * speedMultiplier * this.parallaxFactor;
+                this.baseY += this.vy * speedMultiplier * this.parallaxFactor;
+                
+                // 最终位置（包含飘动和风吹效果）
+                this.x = this.baseX + floatX + windX;
+                this.y = this.baseY + floatY + windY;
+                
+                // 旋转（包含轻微旋转和风吹摇晃）
+                this.rotation += this.rotationSpeed * speedMultiplier + this.rotationSway * 0.1;
+                
+                // 边界处理（柔和反弹）
+                const margin = this.currentSize;
+                if (this.baseX < -margin || this.baseX > this.canvas.width + margin) {
+                    this.vx *= -0.8;
+                    this.baseX = Math.max(-margin, Math.min(this.canvas.width + margin, this.baseX));
+                }
+                
+                if (this.baseY < -margin || this.baseY > this.canvas.height + margin) {
+                    this.vy *= -0.8;
+                    this.baseY = Math.max(-margin, Math.min(this.canvas.height + margin, this.baseY));
+                }
+                
+                // 添加随机扰动（非常轻微）
+                this.vx += (Math.random() - 0.5) * 0.001;
+                this.vy += (Math.random() - 0.5) * 0.001;
+                
+                // 限制速度
+                const maxSpeed = 0.5;
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) {
+                    this.vx = (this.vx / speed) * maxSpeed;
+                    this.vy = (this.vy / speed) * maxSpeed;
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                
+                // 设置透明度
+                ctx.globalAlpha = this.currentOpacity;
+                
+                // 移动到表情位置
+                ctx.translate(this.x, this.y);
+                
+                // 轻微旋转
+                ctx.rotate(this.rotation);
+                
+                // 无阴影效果
+                
+                // 绘制表情
+                const size = this.currentSize;
+                ctx.drawImage(
+                    this.image,
+                    -size / 2,
+                    -size / 2,
+                    size,
+                    size * (this.image.height / this.image.width)
+                );
+                
+                ctx.restore();
+            }
+        }
+
+        class CloudAnimation {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.emotions = [];
+                this.images = [];
+                this.isRunning = true;
+                this.breathCycle = 0;
+                
+                // 控制参数（优化为背景效果）
+                this.speedMultiplier = 0.3;
+                this.breathIntensity = 0.2;
+                this.sizeVariation = 0.3;
+                this.opacityMultiplier = 0.6;
+                this.emotionCount = 8;
+                
+                // FPS 计算
+                this.lastTime = 0;
+                this.frameCount = 0;
+                this.fps = 60;
+                
+                this.initCanvas();
+                this.loadImages();
+                this.bindEvents();
+                this.animate();
+            }
+
+            initCanvas() {
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            loadImages() {
+                const imagePromises = [];
+                
+                for (let i = 1; i <= 12; i++) {
+                    const img = new Image();
+                    const promise = new Promise((resolve, reject) => {
+                        img.onload = () => resolve(img);
+                        img.onerror = () => {
+                            console.warn(`图片加载失败: 123(1)_emotion_${i.toString().padStart(2, '0')}.png`);
+                            resolve(null);
+                        };
+                    });
+                    img.src = `emotion_output/cropped/123(1)_emotion_${i.toString().padStart(2, '0')}.png`;
+                    imagePromises.push(promise);
+                }
+                
+                Promise.all(imagePromises).then(images => {
+                    this.images = images.filter(img => img !== null);
+                    this.createEmotions();
+                });
+            }
+
+            createEmotions() {
+                this.emotions = [];
+                const count = Math.min(this.emotionCount, this.images.length * 2);
+                
+                for (let i = 0; i < count; i++) {
+                    const image = this.images[i % this.images.length];
+                    const x = Math.random() * this.canvas.width;
+                    const y = Math.random() * this.canvas.height;
+                    this.emotions.push(new CloudEmotion(x, y, image, this.canvas));
+                }
+                
+                this.updateStats();
+            }
+
+            bindEvents() {
+                // 控制滑块
+                const speedSlider = document.getElementById('speedSlider');
+                const breathSlider = document.getElementById('breathSlider');
+                const sizeSlider = document.getElementById('sizeSlider');
+                const opacitySlider = document.getElementById('opacitySlider');
+                const countSlider = document.getElementById('countSlider');
+                
+                speedSlider.addEventListener('input', (e) => {
+                    this.speedMultiplier = parseFloat(e.target.value);
+                    document.getElementById('speedValue').textContent = e.target.value;
+                });
+                
+                breathSlider.addEventListener('input', (e) => {
+                    this.breathIntensity = parseFloat(e.target.value);
+                    document.getElementById('breathValue').textContent = e.target.value;
+                });
+                
+                sizeSlider.addEventListener('input', (e) => {
+                    this.sizeVariation = parseFloat(e.target.value);
+                    document.getElementById('sizeValue').textContent = e.target.value;
+                });
+                
+                opacitySlider.addEventListener('input', (e) => {
+                    this.opacityMultiplier = parseFloat(e.target.value);
+                    document.getElementById('opacityValue').textContent = e.target.value;
+                });
+                
+                countSlider.addEventListener('input', (e) => {
+                    this.emotionCount = parseInt(e.target.value);
+                    document.getElementById('countValue').textContent = e.target.value;
+                    this.createEmotions();
+                });
+                
+                // 按钮事件
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    this.isRunning = !this.isRunning;
+                    document.getElementById('pauseBtn').textContent = this.isRunning ? '⏸️ 暂停' : '▶️ 播放';
+                });
+                
+                document.getElementById('resetBtn').addEventListener('click', () => {
+                    this.createEmotions();
+                    this.breathCycle = 0;
+                    this.updateStats();
+                });
+            }
+
+            updateStats() {
+                document.getElementById('cloudCountDisplay').textContent = this.emotions.length;
+                document.getElementById('breathCycleDisplay').textContent = Math.floor(this.breathCycle);
+            }
+
+            animate(currentTime = 0) {
+                // 计算FPS
+                if (currentTime - this.lastTime >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (currentTime - this.lastTime));
+                    document.getElementById('fpsDisplay').textContent = this.fps;
+                    this.frameCount = 0;
+                    this.lastTime = currentTime;
+                }
+                this.frameCount++;
+                
+                if (this.isRunning) {
+                    // 完全清空画布（无拖影效果）
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    // 更新呼吸周期
+                    this.breathCycle += 0.01 * this.speedMultiplier;
+                    
+                    // 更新和绘制表情
+                    this.emotions.forEach(emotion => {
+                        emotion.update(
+                            this.speedMultiplier,
+                            this.breathIntensity,
+                            this.sizeVariation,
+                            this.opacityMultiplier
+                        );
+                        emotion.draw(this.ctx);
+                    });
+                    
+                    this.updateStats();
+                }
+                
+                requestAnimationFrame((time) => this.animate(time));
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            new CloudAnimation();
+        });
+    </script>
+</body>
+</html>

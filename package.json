@@ -1,0 +1,26 @@
+{
+  "name": "sunsetbot",
+  "version": "1.0.0",
+  "description": "这是一个简单的火烧云分析网页，用于展示从 [sunsetbot.top](https://sunsetbot.top/) 获取的火烧云数据。",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "node build.js",
+    "netlify-build": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "fs-extra": "^11.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
